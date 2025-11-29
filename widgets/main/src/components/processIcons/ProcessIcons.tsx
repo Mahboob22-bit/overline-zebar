@@ -3,10 +3,6 @@ import { GlazeWmOutput } from 'zebar';
 import { getProcessIcon, shouldIgnoreProcess } from '../../utils/processIconMap';
 import { ContainerType } from '../windowTitle/WindowTitle';
 
-type ProcessIconsProps = {
-  glazewm: GlazeWmOutput | null;
-};
-
 type Window = {
   id: string;
   type: string;
@@ -21,10 +17,25 @@ type Container = {
   children?: Container[];
 };
 
+type Workspace = Container & {
+  id: string;
+  name: string;
+  displayName?: string;
+  hasFocus: boolean;
+};
+
+type ProcessIconsProps = {
+  glazewm: GlazeWmOutput | null;
+  /** Optional: Show icons for a specific workspace instead of the displayed one */
+  workspace?: Workspace;
+  /** Whether this workspace is currently focused */
+  isFocused?: boolean;
+};
+
 /**
  * Recursively get all windows from a workspace or container
  */
-function getWindows(container: Container | null | undefined): Window[] {
+export function getWindows(container: Container | null | undefined): Window[] {
   if (!container) return [];
 
   const windows: Window[] = [];
@@ -40,10 +51,13 @@ function getWindows(container: Container | null | undefined): Window[] {
   return windows;
 }
 
-export function ProcessIcons({ glazewm }: ProcessIconsProps) {
-  if (!glazewm?.displayedWorkspace) return null;
+export function ProcessIcons({ glazewm, workspace, isFocused = false }: ProcessIconsProps) {
+  // Use provided workspace or fallback to displayed workspace
+  const targetWorkspace = workspace ?? (glazewm?.displayedWorkspace as Workspace | undefined);
 
-  const windows = getWindows(glazewm.displayedWorkspace as Container);
+  if (!targetWorkspace) return null;
+
+  const windows = getWindows(targetWorkspace as Container);
 
   // Filter out ignored processes
   const visibleWindows = windows.filter((win) => !shouldIgnoreProcess(win.processName));
@@ -53,11 +67,11 @@ export function ProcessIcons({ glazewm }: ProcessIconsProps) {
   const springConfig = { type: 'spring', stiffness: 400, damping: 30 };
 
   return (
-    <div className="flex items-center gap-0.5 ml-2">
+    <div className="flex items-center gap-0.5">
       <AnimatePresence mode="popLayout">
         {visibleWindows.map((window) => {
           const Icon = getProcessIcon(window.processName, window.title);
-          const isFocused = window.hasFocus;
+          const isWindowFocused = window.hasFocus && isFocused;
 
           return (
             <motion.span
@@ -68,11 +82,11 @@ export function ProcessIcons({ glazewm }: ProcessIconsProps) {
               transition={springConfig}
               layout
               className={`flex items-center justify-center transition-colors duration-200 ${
-                isFocused ? 'text-primary-text' : 'text-text-muted'
+                isWindowFocused ? 'text-primary-text' : isFocused ? 'text-text' : 'text-text-muted'
               }`}
               title={`${window.processName}: ${window.title}`}
             >
-              <Icon className="w-4 h-4" strokeWidth={isFocused ? 2.5 : 2} />
+              <Icon className="w-3.5 h-3.5" strokeWidth={isWindowFocused ? 2.5 : 2} />
             </motion.span>
           );
         })}
@@ -82,4 +96,3 @@ export function ProcessIcons({ glazewm }: ProcessIconsProps) {
 }
 
 export default ProcessIcons;
-

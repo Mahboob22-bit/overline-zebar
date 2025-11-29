@@ -76,44 +76,54 @@ export function WorkspaceControls({ glazewm }: WorkspaceControlsProps) {
             workspace.name;
 
           return (
-            <motion.button
+            <motion.div
               key={workspace.name}
               transition={springConfig}
-              onClick={() =>
-                glazewm.runCommand(`focus --workspace ${workspace.name}`)
-              }
-              className="relative touch-hitbox flex items-center justify-center px-1 max-w-[10rem] h-full"
-              style={{ WebkitTapHighlightColor: 'transparent' }}
+              className="relative flex items-center h-full gap-1"
             >
-              {isActive && (
-                <motion.span
-                  layoutId="activeWorkspace"
-                  transition={springConfig}
-                  className="absolute w-full h-full inset-0 bg-primary border border-primary-border drop-shadow-sm z-0"
-                  style={{ borderRadius: `calc(${borderRadius} - 0.25rem)` }}
-                />
-              )}
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className={cn(
-                  'relative z-10 truncate px-0.5 w-full h-full leading-none text-center flex items-center justify-center',
-                  'transition-colors ease-in-out duration-200',
-                  isActive
-                    ? 'text-primary-text font-medium'
-                    : 'text-text-muted hover:text-text transition-colors'
-                )}
+              {/* Workspace Button */}
+              <motion.button
+                transition={springConfig}
+                onClick={() =>
+                  glazewm.runCommand(`focus --workspace ${workspace.name}`)
+                }
+                className="relative touch-hitbox flex items-center justify-center px-1 max-w-[10rem] h-full"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
               >
-                {label}
-              </motion.span>
-            </motion.button>
+                {isActive && (
+                  <motion.span
+                    layoutId="activeWorkspace"
+                    transition={springConfig}
+                    className="absolute w-full h-full inset-0 bg-primary border border-primary-border drop-shadow-sm z-0"
+                    style={{ borderRadius: `calc(${borderRadius} - 0.25rem)` }}
+                  />
+                )}
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className={cn(
+                    'relative z-10 truncate px-0.5 w-full h-full leading-none text-center flex items-center justify-center',
+                    'transition-colors ease-in-out duration-200',
+                    isActive
+                      ? 'text-primary-text font-medium'
+                      : 'text-text-muted hover:text-text transition-colors'
+                  )}
+                >
+                  {label}
+                </motion.span>
+              </motion.button>
+
+              {/* Process Icons for this workspace */}
+              <ProcessIcons
+                glazewm={glazewm}
+                workspace={workspace}
+                isFocused={isActive}
+              />
+            </motion.div>
           );
         })}
-
-        {/* Process Icons - shows icons for windows in current workspace */}
-        <ProcessIcons glazewm={glazewm} />
       </motion.div>
     </AnimatePresence>
   );
