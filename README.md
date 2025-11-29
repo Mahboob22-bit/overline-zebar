@@ -1,8 +1,17 @@
 ![Screenshot of overline-zebar in use with GlazeWM, previewing multiple themes and rounded settings](https://github.com/user-attachments/assets/08b4be9a-e405-4217-814b-aac7acd6e0f5)
 
-# overline-zebar
+# overline-zebar (Fork)
+
+> 🔱 **This is a fork of [mushfikurr/overline-zebar](https://github.com/mushfikurr/overline-zebar)**  
+> All credit for the original widget pack goes to [@mushfikurr](https://github.com/mushfikurr)!
 
 A fully featured, highly customizable widget pack for [Zebar](https://github.com/glzr-io/zebar). Works in tandem with GlazeWM, perfect for making Windows look great 🌠
+
+## Changes in this Fork
+
+- 🚀 **Deploy Scripts**: Added `pnpm zebar:deploy` to build and deploy directly to the Zebar directory
+- 🎨 **Enhanced Process Icons**: Improved UWP app detection and additional WhatsApp icon variants
+- 🔧 **Streamlined Components**: Removed unused Media component for cleaner structure
 
 <img width="2124" height="437" alt="System stats widget, hovering from the main widget" src="https://github.com/user-attachments/assets/2846a6ec-8268-4fc0-bed4-1ff6bdb4df55" />
 <img width="1145" height="785" alt="Config widget window, centered on the screen" src="https://github.com/user-attachments/assets/e7536236-3e15-4066-b996-b90eb4f183d7" />
@@ -81,10 +90,10 @@ Choose this option if you want to customize the widget's functionality, modify t
 
 **Steps:**
 
-1.  Clone the repository to your local machine inside the `.glzr` directory (e.g., `C:/Users/<USER>/.glzr/zebar` on Windows):
+1.  Clone the repository to your local machine:
 
     ```sh
-    git clone https://github.com/mushfikurr/overline-zebar.git
+    git clone https://github.com/Mahboob22-bit/overline-zebar.git
     cd overline-zebar
     ```
 
@@ -94,15 +103,21 @@ Choose this option if you want to customize the widget's functionality, modify t
     pnpm install
     ```
 
-3.  Build the project for production:
+3.  Build and deploy to Zebar:
 
     ```sh
-    pnpm --filter "@overline-zebar/*" build
+    pnpm zebar:deploy
     ```
 
-    This creates a `dist` folder in each widget's directory, containing the compiled widget ready for use.
+    This builds all widgets and copies them to `~/.glzr/zebar/`. 
+    
+    Alternatively, you can:
+    - `pnpm build` - Only build (without deploying)
+    - `pnpm zebar:deploy:only` - Only deploy (if already built)
 
-4.  See the [Configuration](#configuration) section below for details on how to customize the widgets.
+4.  **Configure the deployment** (optional): Edit `scripts/deploy.config.sh` to change the widget name and version.
+
+5.  See the [Configuration](#configuration) section below for details on how to customize the widgets.
 
 ## Configuration
 
@@ -183,3 +198,11 @@ This will start the development server for all widgets with hot reloading. Zebar
 ## Contributions
 
 Pull requests are welcome. If you find any issues or have feature suggestions, feel free to open an issue on GitHub.
+
+For contributions to the original project, please visit [mushfikurr/overline-zebar](https://github.com/mushfikurr/overline-zebar).
+
+---
+
+## Acknowledgements
+
+This fork is based on the excellent work by [@mushfikurr](https://github.com/mushfikurr). Thank you for creating such a great widget pack! 🙏
