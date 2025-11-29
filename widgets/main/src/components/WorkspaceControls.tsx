@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { GlazeWmOutput } from 'zebar';
 import { tailwindConfig } from '../main';
 import { cn } from '../utils/cn';
+import { ProcessIcons } from './processIcons';
 import { ContainerType, formatWindowTitle } from './windowTitle/WindowTitle';
 
 type WorkspaceControlsProps = {
@@ -110,6 +111,9 @@ export function WorkspaceControls({ glazewm }: WorkspaceControlsProps) {
             </motion.button>
           );
         })}
+
+        {/* Process Icons - shows icons for windows in current workspace */}
+        <ProcessIcons glazewm={glazewm} />
       </motion.div>
     </AnimatePresence>
   );
