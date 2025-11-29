@@ -16,6 +16,8 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "build": "pnpm --filter \"@overline-zebar/*\" build",
+    "zebar:deploy": "bash scripts/deploy.sh",
+    "zebar:deploy:only": "bash scripts/deploy-only.sh",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,html,yaml,vue,svelte,graphql}",
     "check-format": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,html,yaml,vue,svelte,graphql}\"",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\"",
