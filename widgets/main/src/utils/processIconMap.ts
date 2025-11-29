@@ -105,7 +105,15 @@ export const processIconMap: IconMapEntry[] = [
     icon: MessageCircle,
   },
   {
-    appNames: ['telegram', 'unigram', 'wechat', 'qq', 'whatsapp'],
+    appNames: [
+      'telegram',
+      'unigram',
+      'wechat',
+      'qq',
+      'whatsapp',
+      'whatsappdesktop',
+      'whatsapp.exe',
+    ],
     icon: MessageCircle,
   },
   {
@@ -203,10 +211,9 @@ export function getProcessIcon(processName: string, title?: string): LucideIcon 
 }
 
 /**
- * List of process names to ignore (system processes, etc.)
+ * List of process names to always ignore (system processes, etc.)
  */
 export const ignoredProcesses = [
-  'applicationframehost',
   'shellexperiencehost',
   'searchhost',
   'startmenuexperiencehost',
@@ -216,9 +223,37 @@ export const ignoredProcesses = [
 ];
 
 /**
- * Check if a process should be ignored
+ * UWP host processes that should only be shown if they have a recognized app title
  */
-export function shouldIgnoreProcess(processName: string): boolean {
-  return ignoredProcesses.some((ignored) => processName.toLowerCase().includes(ignored));
+export const uwpHostProcesses = ['applicationframehost'];
+
+/**
+ * Check if a process should be ignored.
+ * UWP apps (running under ApplicationFrameHost) are shown if their title matches a known app.
+ */
+export function shouldIgnoreProcess(processName: string, title?: string): boolean {
+  const lowerProcessName = processName.toLowerCase();
+
+  // Always ignore these system processes
+  if (ignoredProcesses.some((ignored) => lowerProcessName.includes(ignored))) {
+    return true;
+  }
+
+  // For UWP host processes, check if the title matches a known app
+  if (uwpHostProcesses.some((host) => lowerProcessName.includes(host))) {
+    // If no title, ignore
+    if (!title) return true;
+
+    // Check if the title matches any known app
+    const lowerTitle = title.toLowerCase();
+    const hasKnownApp = processIconMap.some((entry) =>
+      entry.appNames.some((name) => lowerTitle.includes(name))
+    );
+
+    // Ignore if we don't recognize the app
+    return !hasKnownApp;
+  }
+
+  return false;
 }
 
