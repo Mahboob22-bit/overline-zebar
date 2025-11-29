@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import * as zebar from 'zebar';
 import { Center } from './components/Center';
 import { LeftButtons } from './components/leftButtons';
-import Media from './components/media';
 import RightButtons from './components/rightButtons/RightButtons';
 import StatProviders from './components/statProviders';
 import Systray from './components/systray';
@@ -15,7 +14,6 @@ import { cn } from './utils/cn';
 import { useAutoTiling } from './utils/useAutoTiling';
 
 const providers = zebar.createProviderGroup({
-  media: { type: 'media' },
   network: { type: 'network' },
   glazewm: { type: 'glazewm' },
   cpu: { type: 'cpu' },
@@ -59,9 +57,6 @@ function App() {
         </div>
         <div className="flex items-center h-full">
           <WorkspaceControls glazewm={output.glazewm} />
-        </div>
-        <div className="flex items-center justify-center h-full">
-          <Media media={output.media} />
         </div>
       </div>
 
