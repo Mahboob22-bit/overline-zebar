@@ -59,8 +59,8 @@ export function ProcessIcons({ glazewm, workspace, isFocused = false }: ProcessI
 
   const windows = getWindows(targetWorkspace as Container);
 
-  // Filter out ignored processes
-  const visibleWindows = windows.filter((win) => !shouldIgnoreProcess(win.processName));
+  // Filter out ignored processes (pass title for UWP app detection)
+  const visibleWindows = windows.filter((win) => !shouldIgnoreProcess(win.processName, win.title));
 
   if (visibleWindows.length === 0) return null;
 
